@@ -4,14 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fno-v2-results"
-version = "0.2.0"
+version = "0.4.0"
 description = "Analysis toolkit and results for Fourier Neural Operator (FNO) v2 experiments"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
-authors = [
-    { name = "Balthasargh" }
-]
+authors = [{ name = "Balthasargh" }]
 keywords = ["fno", "neural-operator", "time-series", "machine-learning", "analysis"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -32,10 +30,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = [
-    "pytest>=7.0",
-    "ruff>=0.4",
-]
+dev = ["pytest>=7.0", "ruff>=0.4", "pre-commit>=3.0"]
+dashboard = ["streamlit>=1.28"]
+all = ["fno-v2-results[dev,dashboard]"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

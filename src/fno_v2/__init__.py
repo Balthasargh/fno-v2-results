@@ -14,11 +14,14 @@ from .analysis import (
     rank_models,
     significant_wins,
     mean_nll_by_model,
+    nll_by_fold,
+    nll_by_column,
     expected_value_from_dist,
     entropy,
+    summary_report,
 )
 
-__version__ = "0.2.0"
+__version__ = "0.4.0"
 __all__ = [
     "load_all",
     "load_config",
@@ -30,6 +33,9 @@ __all__ = [
     "rank_models",
     "significant_wins",
     "mean_nll_by_model",
+    "nll_by_fold",
+    "nll_by_column",
     "expected_value_from_dist",
     "entropy",
+    "summary_report",
 ]
