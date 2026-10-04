@@ -2,63 +2,61 @@
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![CI](https://img.shields.io/badge/CI-GitHub%20Actions-green.svg)](.github/workflows/ci.yml)
 
 **Analysis toolkit and experimental results** for a Fourier Neural Operator (FNO) v2 study.
 
 ## Features
 
-- Model ranking (NLL, RPS, MAE, top-5 hit rate)
-- Statistical comparisons vs strong baselines (ARIMA, LightGBM, GRU, LSTM…)
+- Model ranking & statistical comparisons
 - Next-draw probability distributions
-- Installable Python package with typed helpers
-- Simple CLI (`analyze` / `plot`)
+- Installable package + typed API
+- CLI, Jupyter notebook & **Streamlit dashboard**
+- Standalone **HTML report**
+- Docker support
+- Unit tests + GitHub Actions CI
 
-## Project structure
-
-```
-fno-v2-results/
-├── pyproject.toml
-├── requirements.txt
-├── Makefile
-├── LICENSE
-├── results/                 # Experimental data
-├── images/                  # Figures (PNG)
-├── src/fno_v2/              # Python package
-│   ├── loader.py
-│   └── analysis.py
-├── scripts/
-│   ├── analyze_results.py
-│   └── plot_results.py
-└── tests/
-```
-
-## Installation
+## Quick start (all OS)
 
 ```bash
 git clone https://github.com/Balthasargh/fno-v2-results.git
 cd fno-v2-results
-pip install -e .
-# or with dev tools:
-pip install -e ".[dev]"
-```
 
-## Quick start
+python -m venv .venv
+# Linux/macOS:  source .venv/bin/activate
+# Windows:      .venv\Scripts\activate
 
-```bash
-make analyze          # text analysis
-make plot             # generate plots → outputs/
-make test             # run unit tests
+pip install -e ".[all]"
+
+make analyze      # or: python scripts/analyze_results.py
+make plot         # or: python scripts/plot_results.py
+make report       # HTML → outputs/report.html
+make dashboard    # Streamlit UI
+make test
 ```
 
 ## Python API
 
 ```python
-from fno_v2 import load_all, rank_models, significant_wins, mean_nll_by_model
+from fno_v2 import load_all, rank_models, significant_wins, summary_report
 
 data = load_all()
+print(summary_report(data["models"], data["comparisons"], data["points_test"]))
 print(rank_models(data["models"]))
-print(significant_wins(data["comparisons"]))
-print(mean_nll_by_model(data["points_test"]))
+```
+
+## Project structure
+
+```
+├── results/           # Experimental data
+├── images/            # Figures
+├── src/fno_v2/        # Package
+├── scripts/           # CLI, report, dashboard
+├── notebooks/         # Exploration notebook
+├── tests/
+├── docs/              # Data dictionary
+├── Dockerfile
+└── .github/workflows/ # CI
 ```
 
 ## Main results
@@ -71,16 +69,14 @@ print(mean_nll_by_model(data["points_test"]))
 | LSTM                  | 4.038 | 0.201 | 0.11     |
 | LightGBM              | 4.223 | 0.198 | 0.03     |
 
-Best hyperparameters (Optuna): `L=4`, `modes=3`, `width=24`, bagging enabled.  
+Best hyperparameters (Optuna): `L=4`, `modes=3`, `width=24`, bagging.  
 Validation NLL ≈ 3.810.
 
-## Development
+## Docker
 
 ```bash
-make install-dev
-make test
-make lint
-make clean
+docker build -t fno-v2-results .
+docker run --rm fno-v2-results
 ```
 
 ## License
