@@ -1,0 +1,27 @@
+{
+  "config": {
+    "n_folds": 3,
+    "bloc": 5,
+    "S": 16,
+    "S_tune": 6,
+    "max_epochs": 400,
+    "patience": 40,
+    "n_trials": 40,
+    "n_seeds_rnn": 5,
+    "n_boot": 5000,
+    "seed": 0,
+    "dossier": "fno_v2_resultats"
+  },
+  "meilleurs_hyperparametres": {
+    "L": 4,
+    "modes": 3,
+    "width": 24,
+    "n_layers": 1,
+    "lr": 0.01360587109437098,
+    "wd": 4.798419587229526e-05,
+    "sigma": 5.617013877742207,
+    "use_col": true,
+    "bagging": true
+  },
+  "nll_val_optuna": 3.810096263885498
+}
