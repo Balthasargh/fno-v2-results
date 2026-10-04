@@ -1,59 +1,69 @@
 # FNO v2 Results
 
-Résultats de l'expérimentation **Fourier Neural Operator (FNO) v2**.
+Résultats de l'expérimentation **Fourier Neural Operator (FNO) v2** + outils d'analyse Python.
 
 ## Structure
 
 ```
 fno-v2-results/
 ├── README.md
-├── results/
-│   ├── config.json                      # Hyperparamètres et configuration
-│   ├── tableau_modeles.csv              # Comparaison des modèles (NLL, RPS, MAE...)
-│   ├── comparaisons.csv                 # Tests statistiques (delta, p-values)
-│   ├── points_test.csv                  # Prédictions point par point (test set)
-│   ├── prochain_tirage.csv              # Statistiques du prochain tirage
-│   └── prochain_tirage_distributions.csv # Distributions de probabilité
-└── docs/                                # (optionnel) figures et analyses
+├── LICENSE
+├── requirements.txt
+├── results/                          # Données de l'expérience
+│   ├── config.json
+│   ├── tableau_modeles.csv
+│   ├── comparaisons.csv
+│   ├── points_test.csv
+│   ├── prochain_tirage.csv
+│   └── prochain_tirage_distributions.csv
+├── images/                           # Figures (PNG)
+├── docs/                             # Documentation / figures
+├── src/
+│   ├── __init__.py
+│   ├── loader.py
+│   └── analysis.py
+└── scripts/
+    ├── analyze_results.py
+    └── plot_results.py
 ```
 
-## Contenu principal
+## Installation
 
-### `config.json`
-Configuration de l'expérience et meilleurs hyperparamètres trouvés par Optuna :
-- Architecture FNO (`L`, `modes`, `width`, ...)
-- Optimisation (`lr`, `wd`, `sigma`, bagging...)
-- NLL de validation
-
-### `tableau_modeles.csv`
-Classement des modèles sur le set de test (NLL, RPS, MAE médiane/moyenne, top-5 hit rate).
-
-### `comparaisons.csv`
-Comparaisons statistiques vs baselines (Uniforme, Marginale empirique, AR(1), ARIMA, LightGBM, GRU, LSTM).
-
-### `points_test.csv`
-NLL de chaque modèle pour chaque observation du jeu de test (pli, colonne, temps, valeur réelle).
-
-### `prochain_tirage.csv` & `prochain_tirage_distributions.csv`
-Prédiction du prochain tirage (espérance, médiane, top-5, distributions complètes par colonne).
+```bash
+pip install -r requirements.txt
+```
 
 ## Utilisation
 
-```python
-import pandas as pd
-import json
+```bash
+# Analyse textuelle
+python scripts/analyze_results.py
 
-# Config
-with open("results/config.json") as f:
-    config = json.load(f)
-
-# Tableaux
-models = pd.read_csv("results/tableau_modeles.csv")
-comparisons = pd.read_csv("results/comparaisons.csv")
-points = pd.read_csv("results/points_test.csv")
-next_draw = pd.read_csv("results/prochain_tirage.csv")
-dists = pd.read_csv("results/prochain_tirage_distributions.csv", index_col=0)
+# Graphiques
+python scripts/plot_results.py --out-dir outputs
 ```
+
+## Exemple de code
+
+```python
+from src.loader import load_all
+from src.analysis import rank_models, significant_wins
+
+data = load_all()
+print(rank_models(data["models"]))
+print(significant_wins(data["comparisons"]))
+```
+
+## Contenu des résultats
+
+| Fichier | Description |
+|---------|-------------|
+| `config.json` | Hyperparamètres Optuna + config expérience |
+| `tableau_modeles.csv` | Classement des modèles (NLL, RPS, MAE, top5) |
+| `comparaisons.csv` | Tests statistiques vs baselines |
+| `points_test.csv` | NLL point par point sur le test set |
+| `prochain_tirage.csv` | Stats du prochain tirage |
+| `prochain_tirage_distributions.csv` | Distributions complètes |
 
 ## Licence
 
